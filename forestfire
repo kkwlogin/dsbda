@@ -1,0 +1,91 @@
+1- import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+
+2- df = pd.read_csv("C:/Users/HP/OneDrive/Desktop/DSBDA/Grp B Assign 3/forestfire.csv")
+
+
+3-# 1. Line plot of temperature over time (index)
+plt.figure(figsize=(8, 4))
+plt.plot(df['temp'], label='Temperature (°C)', color='orange')
+plt.title("Temperature Trend")
+plt.xlabel("Record Index")
+plt.ylabel("Temperature (°C)")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+4- # 2. Histogram of burned area
+plt.figure(figsize=(8, 4))
+plt.hist(df['area'], bins=30, color='green', edgecolor='black')
+plt.title("Distribution of Burned Area")
+plt.xlabel("Area Burned (ha)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+
+5-# 3. Scatter plot: Temperature vs Burned Area
+plt.figure(figsize=(8, 4))
+plt.scatter(df['temp'], df['area'], alpha=0.6, color='red')
+plt.title("Temperature vs Burned Area")
+plt.xlabel("Temperature (°C)")
+plt.ylabel("Area Burned (ha)")
+plt.show()
+
+
+
+6- # 4. Bar chart: Average wind speed per day
+avg_wind = df.groupby('day')['wind'].mean()
+plt.figure(figsize=(8, 4))
+avg_wind.plot(kind='bar', color='blue')
+plt.title("Average Wind Speed by Day of Week")
+plt.xlabel("Day")
+plt.ylabel("Average Wind Speed")
+plt.show()
+
+
+7 - # 5. Pie chart: Fires by Month
+month_counts = df['month'].value_counts()
+plt.figure(figsize=(6, 6))
+plt.pie(month_counts, labels=month_counts.index, autopct='%1.1f%%', startangle=90)
+plt.title("Distribution of Fires by Month")
+plt.show()
+
+
+
+8- # 1. Box plot of temperature per month
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='month', y='temp', data=df, palette='coolwarm')
+plt.title("Temperature Distribution per Month")
+plt.show()
+
+9-# 2. Heatmap of correlation between numerical features
+plt.figure(figsize=(10, 6))
+sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='YlGnBu')
+plt.title("Feature Correlation Heatmap")
+plt.show()
+
+
+
+10-# 3. Violin plot: wind speed by day
+plt.figure(figsize=(10, 6))
+sns.violinplot(x='day', y='wind', data=df, palette='Set2')
+plt.title("Wind Speed Distribution by Day")
+plt.show()
+
+
+
+11-# 4. Scatterplot with regression line: Temp vs Area
+plt.figure(figsize=(8, 6))
+sns.regplot(x='temp', y='area', data=df, scatter_kws={'alpha':0.6}, line_kws={"color":"black"})
+plt.title("Temperature vs Area Burned (with regression line)")
+plt.show()
+
+
+12- # 5. Pair plot of main fire indices
+sns.pairplot(df[['FFMC', 'DMC', 'DC', 'ISI']])
+plt.suptitle("Pairplot of Fire Weather Indices", y=1.02)
+plt.show()
