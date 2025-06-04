@@ -1,0 +1,50 @@
+1- import pandas as pd
+
+2- df = pd.read_csv("C:/Users/kaust/Downloads/facebook.csv", sep=';')
+
+3- df.head()
+
+4- # Subset with selected columns
+subset_columns = df[['Page total likes', 'Type', 'Category', 'Post Month', 'Post Weekday']]
+# Subset with first 10 rows
+subset_rows = df.iloc[:10]
+# Display both subsets
+subset_columns.head(), subset_rows
+
+
+5-# Add a simple index to help with merging
+subset_for_merge = df[['Type', 'Post Month']]
+subset_for_merge['Index'] = df.index
+# Create a second small dummy DataFrame to merge
+dummy_merge_df = df[['Page total likes']].copy()
+dummy_merge_df['Index'] = df.index
+# Merge both subsets on 'Index'
+merged_df = pd.merge(subset_for_merge, dummy_merge_df, on='Index')
+# Show merged data
+merged_df.head()
+
+
+6- # Sort by 'Page total likes' in descending order
+sorted_df = df.sort_values(by='Page total likes', ascending=False)
+# Sort by multiple columns
+sorted_multi = df.sort_values(by=['Post Month', 'Page total likes'])
+# Show sorted data
+sorted_df.head(), sorted_multi.head()
+
+
+7-# Transpose the entire DataFrame
+transposed_df = df.head().T  # Just transposing the first 5 rows for simplicity
+# Show transposed data
+transposed_df
+
+8- # Shape of the original dataset
+original_shape = df.shape
+# Melting: Convert wide to long format
+melted = pd.melt(df, id_vars=['Type'], value_vars=['Page total likes', 'Post Month'])
+# Pivoting: Convert long back to wide
+pivoted = melted.pivot_table(index='Type', columns='variable', values='value', aggfunc='mean')
+# Display results
+original_shape, melted.head(), pivoted.head()
+
+
+
