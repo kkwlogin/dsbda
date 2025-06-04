@@ -1,0 +1,35 @@
+1- !pip install google-play-scraper pandas
+
+2- from google_play_scraper import reviews, Sort
+   import pandas as pd
+
+3- app = "com.whatsapp"   /   app="com.flipkart.android"
+
+
+4- print("Fetching reviews... Please wait.")
+data, _ = reviews(
+    app,
+    lang='en',
+    country='us',
+    sort=Sort.NEWEST,
+    count=100
+)
+if not data:
+    print("No reviews found or invalid app package.")
+else:
+    print(f"Fetched {len(data)} reviews.")
+
+
+5- # Create DataFrame with selected fields
+df = pd.DataFrame(data)[['userName', 'score', 'content', 'at']]
+df.columns = ['Customer Name', 'Rating', 'Review', 'Date']
+# Add sentiment tag
+df['Tag'] = df['Rating'].apply(lambda x: 'Positive' if x >= 4 else 'Neutral' if x == 3 else 'Negative')
+
+
+6- # Save to CSV
+filename = f"{app}_reviews.csv"
+df.to_csv(filename, index=False)
+print(f"Saved reviews to {filename}")
+
+7- df.head(20)  # Show first 5 reviews
