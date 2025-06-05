@@ -1,0 +1,148 @@
+Dataset: iris.csv
+Example: Visualize the distribution of Petal Length.
+Steps:
+•	Drag PetalLengthCm to Columns.
+•	Drag PetalLengthCm again to Rows.
+•	Set the chart type to Line Chart or Histogram.
+•	This shows a linear distribution of one variable (1D).
+Dataset: iris.csv
+Example: Compare Petal Length vs Petal Width.
+Steps:
+•	Drag PetalLengthCm to Columns.
+•	Drag PetalWidthCm to Rows.
+•	Choose Scatter Plot.
+•	Color by Species to add class differentiation.
+Dataset: iris.csv
+Note: Tableau doesn't support native 3D, but you can simulate 3D using size or color.
+Steps:
+•	Drag PetalLengthCm to Columns.
+•	Drag PetalWidthCm to Rows.
+•	Drag SepalLengthCm to Size (in Marks card).
+•	Drag Species to Color.
+•	This simulates a 3D volumetric plot using color and size as the 3rd dimension.
+d. Temporal Data Visualization (Simulated)
+📝 Objective:
+Simulate changes in flower measurements over a sequence (like time) using the Id column (1 to 150).
+📊 Steps in Tableau:
+1.	Load iris.csv.
+2.	Drag Id to Columns.
+3.	Drag PetalLengthCm (or any feature) to Rows.
+4.	Drag Species to Color.
+5.	Change the chart type to Line.
+This simulates how petal length varies over observation ID, as if it were a time series.
+
+
+Dataset: iris.csv
+Steps:
+•	Drag PetalLengthCm to Columns.
+•	Drag PetalWidthCm to Rows.
+•	Drag SepalLengthCm to Size.
+•	Drag SepalWidthCm to Shape or Tooltip.
+•	Drag Species to Color.
+This visualizes 4+ dimensions using multiple visual encodings (scatter plot enhanced with size, color, shape).
+f. Tree / Hierarchical Data Visualization (Simulated Treemap)
+📝 Objective:
+Group data into a hierarchy: Species → PetalLength Range.
+📊 Steps in Tableau:
+1.	Create a calculated field:
+o	Go to Analysis → Create Calculated Field
+o	Name it: Petal Length Group
+o	Formula:
+IF [PetalLengthCm] < 2 THEN "<2"
+ELSEIF [PetalLengthCm] < 5 THEN "2-5"
+ELSE ">5"
+END
+2.	Drag Species to Rows also drag some length to columns
+3.	Drag Petal Length Group to Color.
+4.	Drag Id to Size or PetalLengthCm to Size.
+5.	Change show me to Treemap.
+g. Network Data Visualization (Simulated)
+📝 Objective:
+Simulate a network between Species and Petal Length Group (as created above).
+📊 Steps in Tableau:
+1.	Use the same Petal Length Group calculated field.
+2.	Drag Species to Rows.
+3.	Drag Petal Length Group to Columns.
+4.	Drag Id to Size (or COUNT(Id) for connections).
+5.	Change Marks to Circle or Line.
+6.	Drag Species or Petal Length Group to Color.
+
+✔️ Interpretation: This creates a tree-like view showing how each species distributes across petal length ranges.
+
+
+
+a. 1D (Linear) Data Visualization
+🎯 Goal:
+Visualize the distribution of a single variable like age.
+📊 Steps:
+1.	Drag age to Columns.
+2.	Drag age again to Rows.
+3.	Set Marks to Bar or Line.
+4.	(Optional) Drag education to Color to compare by group.
+✔️ Shows how one variable is distributed (age in this case).
+________________________________________
+🔷 b. 2D (Planar) Data Visualization
+🎯 Goal:
+Visualize the relationship between two numerical variables, e.g., age vs hours-per-week.
+📊 Steps:
+1.	Drag age to Columns.
+2.	Drag hours-per-week to Rows.
+3.	Change Marks to Circle or Scatter Plot.
+4.	Drag workclass or education to Color.
+✔️ Shows correlation or patterns between two variables (like work time vs age).
+________________________________________
+🔷 c. 3D (Volumetric) Data Visualization (Simulated)
+🎯 Goal:
+Simulate a 3D plot using size or color as the third dimension.
+📊 Steps:
+1.	Drag age to Columns.
+2.	Drag hours-per-week to Rows.
+3.	Drag education-num to Size (simulates 3rd dimension).
+4.	Drag income to **Color` (for highlighting income groups).
+✔️ Simulates a 3D plot using color and size to encode extra dimensions.
+________________________________________
+🔷 d. Temporal Data Visualization (Simulated)
+⚠️ The Adult dataset doesn't have a date field, so we simulate using age.
+🎯 Goal:
+Track average work hours across increasing age (as if time passed).
+📊 Steps:
+1.	Drag age to Columns.
+2.	Drag hours-per-week to Rows.
+3.	Set aggregation to AVG(hours-per-week) (Right-click → Measure → Average).
+4.	Set chart type to Line.
+5.	Drag income or education to Color.
+✔️ Simulates a temporal trend (e.g., older people working fewer/more hours).
+________________________________________
+🔷 e. Multidimensional Data Visualization
+🎯 Goal:
+Visualize 4 or more variables at once.
+📊 Steps:
+1.	Drag age to Columns.
+2.	Drag hours-per-week to Rows.
+3.	Drag education to **Shape`.
+4.	Drag income to **Color`.
+5.	Drag education-num to **Size`.
+✔️ Shows multiple variables in a single view, using color, size, shape, position.
+________________________________________
+🔷 f. Tree / Hierarchical Data Visualization (Treemap)
+🎯 Goal:
+Group and display categories like workclass → occupation.
+📊 Steps:
+1.	Create a hierarchy by dragging:
+o	workclass above occupation in the Data pane → Right-click → Create Hierarchy.
+2.	Drag the hierarchy to Rows.
+3.	Drag education-num or age to **Size`.
+4.	Drag income to **Color`.
+5.	Open Show Me, and select Treemap.
+✔️ Creates a Treemap showing how occupation is nested within workclass.
+Steps to Create Network-like Visualization:
+g.
+🔨 Step-by-step in Tableau:
+1.	Open your adult_dataset.csv in Tableau Public.
+2.	Drag workclass to Rows.
+3.	Drag occupation to Columns.
+4.	Drag Id (or age, or any field) to Size – or use CNT(occupation) or CNT(Id).
+5.	Drag education or income to Color.
+6.	Set Marks to Circle.
+7.	Adjust the size and labels for clarity.
+
