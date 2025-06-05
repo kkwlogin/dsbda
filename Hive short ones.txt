@@ -1,0 +1,65 @@
+-- Start Hive
+cd /usr/local/hive/bin
+./hive
+
+-- Create and use database
+create database flight_db;
+use flight_db;
+
+-- a. Create an external Hive table
+CREATE EXTERNAL TABLE flight_info(
+  year INT,
+  month INT,
+  day INT,
+  dep_time INT,
+  arr_time INT,
+  flight_num STRING,
+  origin STRING,
+  dest STRING,
+  dep_delay INT,
+  arr_delay INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/hive/external/flight_info/';
+
+-- b. Load data into table
+LOAD DATA LOCAL INPATH '/home/student/Desktop/flight_data.csv' INTO TABLE flight_info;
+
+-- Insert new row
+INSERT INTO TABLE flight_info VALUES (2008, 7, 15, 900, 1130, 'AI101', 'DEL', 'MUM', 10, 5);
+
+-- Add new column
+ALTER TABLE flight_info ADD COLUMNS (airline STRING);
+
+-- Create second table for join
+CREATE TABLE schedule(
+  flight_num STRING,
+  dat STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+-- Join tables
+SELECT f.flight_num, f.origin, f.dest, s.dat
+FROM flight_info f
+JOIN schedule s
+ON (f.flight_num = s.flight_num);
+
+-- c. Create index on dep_delay
+CREATE INDEX idx_delay
+ON TABLE flight_info(dep_delay)
+AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+WITH DEFERRED REBUILD;
+
+-- d. Find average departure delay per day in 2008
+SELECT year, month, day, AVG(dep_delay) AS avg_delay
+FROM flight_info
+WHERE year = 2008
+GROUP BY year, month, day
+ORDER BY year, month, day;
+
+-- Exit
+exit;
