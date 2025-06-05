@@ -1,0 +1,57 @@
+sudo su hduser
+password: 
+/home/compaq$ cd
+pwd
+sudo cp /home/compaq/Desktop/student.txt /home/hduser/
+ls
+pwd
+cd /home/hduser
+start-dfs.sh
+start-yarn.sh
+jps
+cd /usr/local/hive/bin
+./hive
+show databases;
+create database studentdb;
+use studentdb;
+create table student(name string,marks int) row format delimited fields terminated by ',' stored as textfile;
+show tables;
+load data local inpath '/home/hduser/student.txt' into table student;
+select * from student;
+insert into table student values('karan',81);
+select * from student;
+alter table student add columns(dept string);
+describe student;
+select * from student;
+drop table student;
+show tables;
+create table student(name string,marks int,dept string) row format delimited fields terminated by ',' stored as textfile;
+show tables;
+insert into table student values
+    > ('Ravi',90,'CS'),
+    > ('Sneha',85,'IT'),
+    > ('Krishna',92,'CS'),
+    > ('Aman',78,'Mech'),
+    > ('Priya',88,'AI'),
+    > ('Karan',81,'AI');
+select * from student;
+create table course(name string,course string,doj string) row format delimited fields terminated by ',' stored as textfile;
+show tables;
+ insert into table course values
+    > ('Ravi','DBMS','2023-01-10'),
+    > ('Sneha','OS','2023-01-12'),
+    > ('Krishna','DSA','2023-01-15'),
+    > ('Aman','CN','2023-01-16'),
+    > ('Priya','AI','2023-01-18'),
+    > ('Karan','ML','2023-01-20');
+select * from course;
+select s.name,s.marks,c.course,c.doj
+    > from student s join course c
+    > on (s.name = c.name);
+create index idx_name on table student(name)
+    > as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+    > with deferred rebuild;
+show formatted index on student;
+select doj,avg(marks) as avg_marks
+    > from course join student on course.name = student.name
+    > group by doj;
