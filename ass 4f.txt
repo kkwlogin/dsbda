@@ -1,0 +1,55 @@
+ DSBDA ass no 4
+ 
+import pandas as pd
+df = pd.read_csv('facebook.csv', sep = ';')
+
+df.head()
+
+df.columns
+
+subset_df = df[['Type', 'Category', 'Lifetime Post Impressions by people who have liked your Page']]
+
+subset_df.head()
+
+Photo_data = df[df['Type']=='Photo']
+Photo_data.head()
+
+sort_df = df.sort_values(by = 'Lifetime Post Impressions by people who have liked your Page')
+
+sort_df.head()
+
+transpose_df = df.T
+
+transpose_df.head()
+
+rows, cols = df.shape
+print(rows, cols)
+
+import numpy as np
+reshaped_arr = np.array(df).reshape(-1,19)
+
+reshaped_arr
+
+reshaped_arr.shape
+
+df_1 = pd.DataFrame({
+  'id': [1,2,3],
+  'name': ['alice', 'bob', 'charles']
+})
+
+df_2 = pd.DataFrame({
+    'id': [1,2,3],
+    'salary': [200,100,300]
+})
+
+merged_df = pd.merge(df_1, df_2, on = 'id')
+
+merged_df.head()
+
+melted_df = pd.melt(df, id_vars=['Type'], value_vars=['Post Month', 'Post Weekday'])
+print(melted_df.head())
+
+pivoted_df = df.pivot_table(index='Type', columns='Category', values='Post Month', aggfunc='mean')
+print(pivoted_df.head())
+
+print(df.shape)

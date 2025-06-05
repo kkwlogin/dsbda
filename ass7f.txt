@@ -1,0 +1,117 @@
+DSBD ASs 7 MATPLOt& SEAborn
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv('forestfire.csv')
+------------
+#MATPLOT.PYPLOT
+
+# bar plot
+counts_by_month = df['month'].value_counts().sort_index()
+plt.bar(counts_by_month.index, counts_by_month.values)
+plt.title('Number of Fires by Month (Matplotlib)')
+plt.xlabel('Month')
+plt.ylabel('Count')
+plt.show()
+-------------------
+#Line plot
+area_burned_per_month = df.groupby('month')['area'].mean()
+plt.plot(area_burned_per_month.index, area_burned_per_month.values)
+plt.xlabel('Month')
+plt.ylabel('Average area burned')
+plt.grid('show')
+plt.show()
+--------------------
+counts_by_day = df['day'].value_counts()
+
+# ----- Matplotlib Pie Chart -----
+plt.pie(counts_by_day.values,
+        labels=counts_by_day.index,
+        autopct='%1.1f%%')
+plt.title('Fires by Day of Week (Matplotlib)')
+plt.axis('equal')
+plt.show()
+---------------------
+# ----- Matplotlib Histogram -----
+plt.hist(df['area'], bins=20)
+plt.title('Distribution of Area Burned (Matplotlib)')
+plt.xlabel('Area')
+plt.ylabel('Frequency')
+plt.show()
+-----------------
+# ----- Matplotlib Scatter Plot -----
+df2 = df[df['area'] > 0]
+
+plt.scatter(df2['area'], df2['temp'])
+plt.xlabel('area')
+plt.ylabel('temp')
+plt.grid(True)  # show grid
+
+plt.show()
+----------------------------
+df.boxplot(column='temp', by='month')
+plt.xlabel('Month')
+plt.ylabel('Temp')
+plt.show()
+-------------------------
+#SEABORN
+
+# Convert value_counts to DataFrame for seaborn
+counts_by_month = df['month'].value_counts().sort_index().reset_index()
+counts_by_month.columns = ['month', 'count']
+
+# Plot using seaborn
+sns.barplot(x='month', y='count', data=counts_by_month)
+plt.title('Number of Fires by Month (Seaborn)')
+plt.xlabel('Month')
+plt.ylabel('Count')
+plt.show()
+------------------
+
+# Grouping the data
+area_burned_per_month = df.groupby('month')['area'].mean().reset_index()
+
+# Seaborn line plot
+sns.lineplot(x='month', y='area', data=area_burned_per_month)
+plt.xlabel('Month')
+plt.ylabel('Average Area Burned')
+plt.title('Average Area Burned per Month (Seaborn)')
+plt.grid(True)
+plt.show()
+-----------------------
+
+sns.histplot(df['area'], bins=20, kde=False)
+plt.title('Distribution of Area Burned (Seaborn)')
+plt.xlabel('Area')
+plt.ylabel('Frequency')
+plt.show()
+---------------------------------
+
+# Seaborn scatter plot
+df2 = df[df['area']>0]
+sns.scatterplot(x = 'area', y = 'temp', data = df2)
+plt.grid('show')
+--------------------------------------
+
+#HEATMAP
+sns.heatmap(df.select_dtypes(include=['number']).corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Heatmap")
+plt.show()
+--------------------------------
+
+# ----- Seaborn Box Plot -----
+sns.boxplot(y='wind', data=df)
+plt.title('Wind Speed Distribution (Seaborn)')
+plt.ylabel('Wind Speed')
+plt.show()
+---------------------------------------
+
+sns.boxplot(x='month', y='temp', data=df)
+plt.xlabel('Month')
+plt.ylabel('Temp')
+plt.title('')  # to remove the default seaborn boxplot title which includes "temp by month"
+plt.show()
+--------------------

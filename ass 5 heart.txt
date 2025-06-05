@@ -1,0 +1,117 @@
+DSBD ass 5 Heart
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+
+df = pd.read_csv('heartdisease.csv')
+
+df.head()
+
+df.isnull().sum()
+
+# Data Cleaning
+df.dropna(inplace=True)  # Remove rows with null values
+
+df.isnull().sum()
+
+df.drop_duplicates(inplace=True)  # Remove duplicate rows
+
+df.head()
+
+# Data Integration (merging selected columns)
+subset_1 = ['Age', 'Sex', 'RestBP', 'Chol', 'Fbs', 'RestECG', 'MaxHR', 'ExAng', 'Oldpeak', 'Slope', 'Ca']
+subset_2 = ['ChestPain', 'Thal']
+merged_df = pd.concat([df[subset_1], df[subset_2]], axis=1)
+
+print(merged_df.head())
+
+print("\nBoxplots before outlier removal:")
+for col in subset_1:
+    plt.figure(figsize=(4, 3))
+    sns.boxplot(x=df[col])
+    plt.title(f'Before: {col}')
+    plt.show()
+	
+# Error Correction (Outlier removal using IQR method)
+def remove_outlier(col):
+    q1 = col.quantile(0.25)
+    q3 = col.quantile(0.75)
+    iqr = q3 - q1
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+    return col.clip(lower, upper)
+
+for col in subset_1:
+    df[col] = remove_outlier(df[col])
+	
+# Show boxplots after outlier removal
+print("\nBoxplots after outlier removal:")
+for col in subset_1:
+    plt.figure(figsize=(4, 3))
+    sns.boxplot(x=df[col])
+    plt.title(f'After: {col}')
+    plt.show()
+
+# Data Transformation
+X = df.drop('AHD', axis=1)  # Features
+y = df['AHD']               # Target
+
+X.head()
+
+X.isnull().sum()
+
+X = X.iloc[:, 1:]
+y.head()
+
+# Label Encoding (for categorical features)
+label_cols = ['ChestPain', 'Thal']
+le = LabelEncoder()
+for col in label_cols:
+    X[col] = le.fit_transform(X[col])
+	
+X[label_cols].head()
+
+# Feature Scaling
+scale_cols = ['Age', 'Sex', 'RestBP', 'Chol', 'Fbs', 'RestECG',
+              'MaxHR', 'ExAng', 'Oldpeak', 'Slope', 'Ca']
+scaler = StandardScaler()
+X[scale_cols] = scaler.fit_transform(X[scale_cols])
+
+X[scale_cols].head()
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print("\nX_train shape:", X_train.shape)
+print("X_test shape:", X_test.shape)
+
+# Handling missing values (just in case any remain after cleaning)
+imputer = SimpleImputer(strategy='mean')
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)
+
+X.isnull().sum()
+
+# Model Building
+log_model = LogisticRegression()
+log_model.fit(X_train, y_train)
+log_pred = log_model.predict(X_test)
+print("Logistic Regression Accuracy:", accuracy_score(y_test, log_pred))
+
+svc_model = SVC()
+svc_model.fit(X_train, y_train)
+svc_pred = svc_model.predict(X_test)
+print("SVC Accuracy:", accuracy_score(y_test, svc_pred))
+
+# Confusion Matrix
+ConfusionMatrixDisplay(confusion_matrix(y_test, svc_pred)).plot()
+plt.title("SVC Confusion Matrix")
+plt.show()

@@ -1,0 +1,46 @@
+assignment 9 web scrapping using beautifulsoup
+
+import requests
+import bs4
+import pandas as pd
+
+request1=requests.get("https://books.toscrape.com/catalogue/page-2.html")
+request1
+
+soup=bs4.BeautifulSoup(request1.text)
+soup
+
+soup.select('article')
+
+soup.select('article h3 a')
+
+len(soup.select('article h3 a'))
+
+soup.select('article h3 a')[0]['title']
+
+soup.select('article h3 a')[0]['href']
+
+request2=requests.get("https://books.toscrape.com/catalogue/in-her-wake_980/index.html")
+request2
+
+soup=bs4.BeautifulSoup(request2.text)
+soup
+
+soup.select('article')
+
+soup.select('article h3 a')
+
+len(soup.select('article h3 a'))soup.select('article h3 a')[0]['title']
+
+soup.select('article h3 a')[0]['href']
+
+title_book=[]
+rating_book=[]
+for page_num in range (1,50):
+    req_page=requests.get(f'https://books.toscrape.com/catalogue/page-{page_num}.html')
+    soup_page=bs4.BeautifulSoup(req_page.text)
+    for item in soup_page.select('article h3 a'):
+        title_book.append(item['title'])
+        print(len(title_book))
+		
+		

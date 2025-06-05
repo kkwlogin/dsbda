@@ -1,0 +1,21 @@
+DSBD ASS 9 WEB SCARRAPER
+
+pip install google_play_scraper
+
+from google_play_scraper import reviews, Sort
+import pandas as pd
+
+app = "in.amazon.mShop.android.shopping"
+
+data,_= reviews(app, count = 100)
+
+print(len(data))
+
+print(data[0])
+
+df = pd.DataFrame(data)[['userName', 'score', 'content', 'at']]
+df.columns = ['Customer Name', 'Rating', 'Review', 'Date']
+
+df['Tag'] = df['Rating'].apply(lambda x: 'Positive' if x>=4 else 'Neutral' if x ==3 else 'Negative')
+
+df
